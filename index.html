@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Warehouse Caption Checker</title>
+  <style>
+    :root {
+      --pink: #db2777;
+      --hot: #ec4899;
+      --soft: #fce7f3;
+      --lighter: #fff7fb;
+      --text: #3b1430;
+      --muted: #7a3d62;
+      --card: rgba(255, 255, 255, 0.92);
+      --border: #f9a8d4;
+      --good: #15803d;
+      --warn: #b45309;
+      --bad: #be123c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #ffe4f1, transparent 35%),
+        radial-gradient(circle at bottom right, #fbcfe8, transparent 35%),
+        linear-gradient(135deg, #fff7fb, #ffe4f1);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+
+    .breathing-banner {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-radius: 32px;
+      background: linear-gradient(135deg, #ff69b4, #f472b6, #fb7185);
+      color: white;
+      box-shadow: 0 24px 70px rgba(219, 39, 119, 0.28);
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 24px 70px rgba(219, 39, 119, 0.25);
+      }
+      50% {
+        transform: scale(1.018);
+        box-shadow: 0 28px 90px rgba(219, 39, 119, 0.42);
+      }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      letter-spacing: -0.05em;
+    }
+
+    .subtitle {
+      margin: 1rem auto 0;
+      max-width: 720px;
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+
+    .badges {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 1.5rem;
+      box-shadow: 0 16px 45px rgba(219, 39, 119, 0.12);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--pink);
+      font-size: 1.45rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 1rem 0 0.4rem;
+    }
+
+    textarea,
+    input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 0.9rem;
+      font: inherit;
+      color: var(--text);
+      background: white;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    textarea:focus,
+    input:focus {
+      border-color: var(--hot);
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15);
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .check-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .check {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      padding: 0.8rem;
+      border-radius: 18px;
+      background: var(--lighter);
+      border: 1px solid #fbcfe8;
+    }
+
+    .check input {
+      width: auto;
+      margin-top: 0.2rem;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      padding: 1rem 1.25rem;
+      margin-top: 1.2rem;
+      background: var(--pink);
+      color: white;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(219, 39, 119, 0.25);
+    }
+
+    button:hover {
+      background: #be185d;
+    }
+
+    .result-box {
+      padding: 1rem;
+      border-radius: 22px;
+      background: var(--lighter);
+      border: 1px solid #fbcfe8;
+      margin-bottom: 1rem;
+    }
+
+    .score {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--pink);
+      line-height: 1;
+    }
+
+    .status {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-top: 0.5rem;
+    }
+
+    .pass {
+      color: var(--good);
+    }
+
+    .review {
+      color: var(--warn);
+    }
+
+    .fail {
+      color: var(--bad);
+    }
+
+    .feedback-list {
+      padding-left: 1.2rem;
+      line-height: 1.65;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.7rem;
+    }
+
+    .pill {
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      background: #fce7f3;
+      border: 1px solid #f9a8d4;
+      color: #9d174d;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      color: var(--muted);
+    }
+
+    .mini {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <section class="breathing-banner">
+      <h1>💖📦 Warehouse Caption Checker 📦💖</h1>
+      <p class="subtitle">
+        A practical caption QA tool for checking whether warehouse image descriptions are accurate,
+        complete, clear, specific, grounded, and useful.
+      </p>
+      <div class="badges">
+        <span class="badge">TypeScript-minded</span>
+        <span class="badge">Caption QA</span>
+        <span class="badge">Annotation Review</span>
+        <span class="badge">DaCameraGirl Build</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>📝 Review a Caption</h2>
+      <p class="mini">
+        Paste a warehouse image caption below. Then mark what the caption includes or fails at.
+        The checker gives a practical QA score and reviewer-style feedback.
+      </p>
+
+      <label for="caption">Caption to review</label>
+      <textarea id="caption" placeholder="Example: A warehouse aisle with stacked boxes on pallets and shelves along both sides."></textarea>
+
+      <label for="visibleObjects">Visible objects or scene notes</label>
+      <input id="visibleObjects" placeholder="Example: boxes, pallets, shelves, forklift, loading dock" />
+
+      <label>Quality checks</label>
+
+      <div class="check-grid">
+        <label class="check">
+          <input type="checkbox" id="accurate" />
+          <span>🎯 Accurate: describes what is visible</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="complete" />
+          <span>🧩 Complete: includes important objects/details</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="clear" />
+          <span>🪞 Clear: easy to understand</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="specific" />
+          <span>🔎 Specific: not too vague</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="grounded" />
+          <span>⚓ Grounded: avoids guessing/inventing</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="relevant" />
+          <span>📌 Relevant: focused on the warehouse scene</span>
+        </label>
+      </div>
+
+      <label>Problems found</label>
+
+      <div class="check-grid">
+        <label class="check">
+          <input type="checkbox" id="tooVague" />
+          <span>🌫️ Too vague</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="missingObjects" />
+          <span>🚫 Missing visible objects</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="hallucination" />
+          <span>👻 Mentions things not shown</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="unclear" />
+          <span>🧱 Confusing or awkward wording</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="tooShort" />
+          <span>📉 Too short to be useful</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="tooLong" />
+          <span>🎈 Over-explains or assumes too much</span>
+        </label>
+      </div>
+
+      <button onclick="runCheck()">✨ Check Caption Quality</button>
+    </section>
+
+    <aside class="card">
+      <h2>📊 QA Result</h2>
+
+      <div class="result-box">
+        <div class="score" id="score">--</div>
+        <div class="status" id="status">Paste a caption and run the checker.</div>
+      </div>
+
+      <h2>💬 Feedback</h2>
+      <ul class="feedback-list" id="feedback">
+        <li>The review feedback will appear here.</li>
+      </ul>
+
+      <h2>🏷️ Detected Caption Signals</h2>
+      <div class="pill-row" id="signals">
+        <span class="pill">Waiting for caption</span>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    Built by Angela Hudson · DaCameraGirl 💖
+  </footer>
+
+  <script>
+    function getChecked(id) {
+      return document.getElementById(id).checked;
+    }
+
+    function addFeedback(items, text) {
+      items.push(text);
+    }
+
+    function runCheck() {
+      const caption = document.getElementById("caption").value.trim();
+      const visibleObjects = document.getElementById("visibleObjects").value.trim();
+
+      const positives = [
+        "accurate",
+        "complete",
+        "clear",
+        "specific",
+        "grounded",
+        "relevant"
+      ];
+
+      const negatives = [
+        "tooVague",
+        "missingObjects",
+        "hallucination",
+        "unclear",
+        "tooShort",
+        "tooLong"
+      ];
+
+      let score = 0;
+      const feedback = [];
+      const signals = [];
+
+      if (!caption) {
+        document.getElementById("score").textContent = "--";
+        document.getElementById("status").textContent = "Please paste a caption first.";
+        document.getElementById("status").className = "status fail";
+        document.getElementById("feedback").innerHTML = "<li>No caption was provided.</li>";
+        document.getElementById("signals").innerHTML = '<span class="pill">No caption</span>';
+        return;
+      }
+
+      positives.forEach((id) => {
+        if (getChecked(id)) score += 12;
+      });
+
+      negatives.forEach((id) => {
+        if (getChecked(id)) score -= 8;
+      });
+
+      const wordCount = caption.split(/\s+/).filter(Boolean).length;
+
+      if (wordCount >= 8 && wordCount <= 35) {
+        score += 10;
+        signals.push("Good length");
+      } else if (wordCount < 8) {
+        score -= 10;
+        addFeedback(feedback, "Caption may be too short to describe the warehouse scene properly.");
+        signals.push("Short caption");
+      } else {
+        score -= 6;
+        addFeedback(feedback, "Caption may be too long or overloaded with details.");
+        signals.push("Long caption");
+      }
+
+      const warehouseTerms = [
+        "box", "boxes", "pallet", "pallets", "shelf", "shelves",
+        "rack", "racks", "warehouse", "forklift", "package",
+        "packages", "inventory", "loading", "aisle", "crate", "crates"
+      ];
+
+      const lowerCaption = caption.toLowerCase();
+      const matchedTerms = warehouseTerms.filter((term) => lowerCaption.includes(term));
+
+      if (matchedTerms.length > 0) {
+        score += 8;
+        signals.push("Warehouse terms found");
+      } else {
+        score -= 8;
+        addFeedback(feedback, "Caption does not include clear warehouse-related visual terms.");
+        signals.push("Few warehouse terms");
+      }
+
+      if (visibleObjects) {
+        const objectWords = visibleObjects
+          .toLowerCase()
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+
+        const missing = objectWords.filter((item) => !lowerCaption.includes(item));
+
+        if (missing.length === 0 && objectWords.length > 0) {
+          score += 8;
+          signals.push("Matches scene notes");
+        } else if (missing.length > 0) {
+          score -= Math.min(12, missing.length * 3);
+          addFeedback(feedback, "Caption may be missing these visible scene notes: " + missing.join(", ") + ".");
+          signals.push("Missing scene details");
+        }
+      }
+
+      if (getChecked("accurate")) addFeedback(feedback, "Caption appears accurate based on the reviewer check.");
+      if (getChecked("complete")) addFeedback(feedback, "Caption includes important visible details.");
+      if (getChecked("clear")) addFeedback(feedback, "Caption is clear and readable.");
+      if (getChecked("specific")) addFeedback(feedback, "Caption gives useful specific detail.");
+      if (getChecked("grounded")) addFeedback(feedback, "Caption appears grounded and avoids unsupported assumptions.");
+      if (getChecked("relevant")) addFeedback(feedback, "Caption stays relevant to the warehouse scene.");
+
+      if (getChecked("tooVague")) addFeedback(feedback, "Caption needs more specific visual detail.");
+      if (getChecked("missingObjects")) addFeedback(feedback, "Caption should include important visible objects.");
+      if (getChecked("hallucination")) addFeedback(feedback, "Caption may include unsupported or invented details.");
+      if (getChecked("unclear")) addFeedback(feedback, "Caption wording should be cleaned up for clarity.");
+      if (getChecked("tooShort")) addFeedback(feedback, "Caption should be expanded with useful visual information.");
+      if (getChecked("tooLong")) addFeedback(feedback, "Caption should be tightened and stripped of assumptions.");
+
+      score = Math.max(0, Math.min(100, score));
+
+      let status = "";
+      let statusClass = "";
+
+      if (score >= 80) {
+        status = "Pass: strong caption quality 💖";
+        statusClass = "status pass";
+      } else if (score >= 55) {
+        status = "Needs review: usable, but needs cleanup ✨";
+        statusClass = "status review";
+      } else {
+        status = "Fail: caption needs major revision 🚨";
+        statusClass = "status fail";
+      }
+
+      if (feedback.length === 0) {
+        feedback.push("No major issues selected. Caption looks usable, but human review still matters because apparently reality remains complicated.");
+      }
+
+      document.getElementById("score").textContent = score;
+      document.getElementById("status").textContent = status;
+      document.getElementById("status").className = statusClass;
+
+      document.getElementById("feedback").innerHTML = feedback
+        .map((item) => "<li>" + item + "</li>")
+        .join("");
+
+      const finalSignals = signals.length ? signals : ["Caption reviewed"];
+
+      document.getElementById("signals").innerHTML = finalSignals
+        .map((signal) => '<span class="pill">' + signal + "</span>")
+        .join("");
+    }
+  </script>
+</body>
+</html>
