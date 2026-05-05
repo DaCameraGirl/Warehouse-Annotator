@@ -1,0 +1,50 @@
+{
+  "version": "1.0.0",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-05-05",
+      "notes": "Initial extraction of approved and incorrect terms from in-component constants."
+    }
+  ],
+  "approvedTerms": {
+    "Desktop Equipment": ["Scale", "Cell phone", "Label printer", "Monitor", "Keyboard", "Scanner", "Tape dispenser"],
+    "Warehouse Machinery": ["Void fill machine", "Point of Sale Machine", "Bubble wrap machine", "Automatic conveyor belt", "Roller conveyor", "AMR (automatic mobile robot)"],
+    "Transportation": ["Forklift", "Utility Cart", "Pallet Jack", "Automated Mobile Robot", "Metal Ladder"],
+    "Storage": ["Wooden Pallet", "Metal cart with white boxes", "Cardboard box (fully built)", "Flattened cardboard box", "Blue Bin", "Tall metal shelving"],
+    "Recording-Related": ["Tripod", "Clapperboard", "Production Slate", "Board"],
+    "Clothing and Dress": ["T-shirt", "Polo shirt", "Long-sleeved shirt", "Safety Vest", "Safety helmet", "Headband", "Hair clip", "Glasses"],
+    "Flooring": ["Anti-fatigue floor mat", "Blue tape rectangles", "Extension cords"],
+    "Warehouse Design": ["Dock doors", "Bay #", "Canvas"],
+    "Misc": ["Trash can"]
+  },
+  "incorrectTerms": {
+    "man": "male worker",
+    "woman": "female worker",
+    "guy": "male worker",
+    "lady": "female worker",
+    "person": "worker",
+    "individual": "worker",
+    "employee": "worker",
+    "staff": "worker",
+    "conveyor belt": "automatic conveyor belt",
+    "conveyor": "automatic conveyor belt",
+    "phone": "cell phone",
+    "mobile phone": "cell phone",
+    "smartphone": "cell phone",
+    "computer": "monitor",
+    "PC": "monitor",
+    "laptop": "monitor",
+    "shelves": "tall metal shelving",
+    "shelf": "tall metal shelving",
+    "shelving": "tall metal shelving",
+    "robot": "Automated Mobile Robot",
+    "AGV": "Automated Mobile Robot",
+    "cart": "utility cart",
+    "trolley": "utility cart",
+    "box": "cardboard box (fully built)",
+    "package": "cardboard box (fully built)",
+    "background": "bay",
+    "behind": "bay"
+  }
+}

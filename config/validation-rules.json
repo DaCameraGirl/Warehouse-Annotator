@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-05-05",
+      "notes": "Initial extraction of banned words from in-component constants."
+    }
+  ],
+  "bannedWords": ["man", "woman", "guy", "lady"]
+}
